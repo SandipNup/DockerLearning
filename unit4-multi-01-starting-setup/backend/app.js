@@ -45,6 +45,9 @@ app.get('/goals', async (req, res) => {
 });
 
 app.post('/goals', async (req, res) => {
+  console.log("Get Goals");
+  console.log("Get Goalsssssssssssss");
+  console.log("Set Live Update working Goalsssssssssssss");
   console.log('TRYING TO STORE GOAL');
   const goalText = req.body.text;
 
@@ -84,7 +87,10 @@ app.delete('/goals/:id', async (req, res) => {
 });
 
 mongoose.connect(
-  'mongodb://localhost:27017/course-goals',
+  `mongodb://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@mongodb:27017/course-goals?authSource=admin`,
+
+  // mongodb://sandy:sandy123@mongodb:27017/course-goals?authSource=admin
+
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -93,6 +99,7 @@ mongoose.connect(
     if (err) {
       console.error('FAILED TO CONNECT TO MONGODB');
       console.error(err);
+      console.log("mongodb://mongodb:27017/course-goals")
     } else {
       console.log('CONNECTED TO MONGODB');
       app.listen(80);
