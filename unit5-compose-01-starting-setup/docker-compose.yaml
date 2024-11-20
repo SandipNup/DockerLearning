@@ -1,0 +1,57 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo
+    volumes:
+      - data:/data/db
+
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME:sandy
+    #   MONGO_INITDB_ROOT_PASSWORD:sandy123
+      # - MONGO_INITDB_ROOT_USERNAME=max
+      # - MONGO_INITDB_ROOT_PASSWORD=secret
+    
+    env_file:
+      - ./env/mongo.env
+
+    # networks:
+    #   - goals-net
+
+  backend:
+    build: ./backend
+    ports:
+      - '81:80'
+
+    volumes:
+      - logs:/app/logs
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - ./env/backend.env
+    depends_on:
+      - mongodb
+
+
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    #   args:
+    #     - some-arg=some-value
+
+
+  frontend:
+    build: ./frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend/src:/app/src
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+
+volumes:
+  data:
+  logs:
